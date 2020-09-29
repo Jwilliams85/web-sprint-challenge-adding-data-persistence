@@ -1,23 +1,25 @@
-
-const express = require ('express');
-
-const actionRouter = require("./data/action/actionRouter")
-const projectRouter = require("./data/project/projectRouter")
+const express = require("express");
+const helmet = require ("helmet");
 
 
-const helmet = require('helmet');
-const server = express();
+const projectRouter = require("./project/projectRouter");
+const taskRouter = require("./task/taskRouter");
 
+const resourceRouter = require("./resource/resourceRouter");
+const projectResourceRouter = require("./resource/projectResourceRouter");
+const CORS = require("cors");
 
-server.use(express.json())
- 
+const server=express();
 server.use(helmet());
+server.use(CORS());
 
-server.get("/", (req, res) => {
-    res.status(200).json({message: "The server is online!"})//initial response 
-})
+server.use(express.json());
+server.use("/api/project", projectRouter);
+server.use("/api/task", taskRouter);
+server.use("/api/resource", resourceRouter);
+server.use("/api/projectresource", projectResourceRouter)
 
-server.use("/api/project", projectRouter)
-server.use("/api/action", actionRouter)
-
+// server.get("/", (req, res) => {
+//     res.send(`<h1>Hello World</h1>`)
+// })
 module.exports = server;
